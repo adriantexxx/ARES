@@ -1,0 +1,2 @@
+export type KnoxGuardState='pending'|'activating'|'active'|'locked'|'unlocking'|'completed'|'unknown'
+export const knoxGuardModule={safePurpose:'Explain security-management states and route legitimate owners to support.', allowedRoutes:['carrier','retailer or finance provider','organisation administrator','Samsung support'], prohibited:['Knox Guard bypass','FRP bypass','MDM bypass','IMEI modification','unauthorised security modification']} as const

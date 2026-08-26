@@ -1,0 +1,5 @@
+import type { DiagnosticSession } from '../types'; import { supabase } from './supabase'
+const storageKey='agentics:ares:last-session'
+export function createSession(model:string):DiagnosticSession { const now=new Date().toISOString(); return {id:crypto.randomUUID(),flowId:'samsung-boot-loop',status:'active',device:{manufacturer:'Samsung',model},answers:{},evidence:[],createdAt:now,updatedAt:now} }
+export async function persistSession(s:DiagnosticSession){ localStorage.setItem(storageKey,JSON.stringify(s)); if(!supabase)return; const {data}=await supabase.auth.getUser(); if(!data.user)return; await supabase.from('diagnostic_sessions').upsert({id:s.id,user_id:data.user.id,flow_id:s.flowId,status:s.status,manufacturer:s.device.manufacturer,device_model:s.device.model,answers:s.answers,updated_at:s.updatedAt},{onConflict:'id'}) }
+export async function loadSession():Promise<DiagnosticSession|null>{const raw=localStorage.getItem(storageKey);return raw?JSON.parse(raw) as DiagnosticSession:null}
